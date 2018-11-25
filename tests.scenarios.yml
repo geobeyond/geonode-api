@@ -78,7 +78,7 @@
           "name": "Update Dataset",
           "input": {
             "method": "put",
-            "url": "{$$.env.host}/datasets/{$.ctx.datasetUiid}?apikey={$$.env.datasetsApiKey}",
+            "url": "{$$.env.host}/datasets/{$.ctx.datasetUuid}?apikey={$$.env.datasetsApiKey}",
             "body": {
               "name": "string",
               "completed": [
