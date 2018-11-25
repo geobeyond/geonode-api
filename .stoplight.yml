@@ -1,7 +1,11 @@
-stoplight: '1.0'
-environments:
-  default:
-    host: 'http://todos.stoplight.io'
-    todosApiKey: 123
-  staging: {}
-  production: {}
+{
+  "stoplight": "1.0",
+  "environments": {
+    "default": {
+      "host": "http://api.geonode.org",
+      "datasetsApiKey": 123
+    },
+    "staging": {},
+    "production": {}
+  }
+}
