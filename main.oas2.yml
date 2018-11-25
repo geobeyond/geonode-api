@@ -28,6 +28,10 @@ securityDefinitions:
     type: apiKey
     in: query
     description: '#### Use ?apikey=123 to authenticate requests. Super secure, we know ;).'
+  api-key:
+    type: apiKey
+    in: header
+    name: X-GEONODE-APIKEY
 paths:
   '/datasets/{datasetUuid}':
     parameters:
