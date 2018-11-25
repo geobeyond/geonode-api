@@ -1,0 +1,231 @@
+swagger: '2.0'
+info:
+  version: '1.0'
+  title: GeoNode API Demo
+  description: >-
+    This OAS2 (Swagger 2) file represents a real API that lives at
+    http://api.geonode.org.
+
+
+    For authentication information, click the apikey security scheme in the
+    editor sidebar.
+  contact:
+    name: GeoNode Development Team
+    url: 'http://geonode.org'
+  license:
+    name: GPL-3.0
+host: api.geonode.org
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  apikey:
+    name: apikey
+    type: apiKey
+    in: query
+    description: '#### Use ?apikey=123 to authenticate requests. Super secure, we know ;).'
+  api-key:
+    type: apiKey
+    in: header
+    name: X-GEONODE-APIKEY
+    description: >-
+      #### Use custom header X-GEONODE-APIKEY=123 to authenticate requests.
+      Super secure, we know ;).
+paths:
+  '/datasets/{datasetUuid}':
+    parameters:
+      - name: datasetUuid
+        in: path
+        type: string
+        required: true
+    get:
+      operationId: GET_dataset
+      summary: Get Dataset
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/dataset-full'
+          examples:
+            application/json:
+              id: 1
+              name: get food
+              completed: false
+              completed_at: '1955-04-23T13:22:52.685Z'
+              created_at: '1994-11-05T03:26:51.471Z'
+              updated_at: '1989-07-29T11:30:06.701Z'
+            random: "{\n\t\"foo\": \"bar\"\n}\n"
+        '404':
+          $ref: './common.oas2.yml#/responses/404'
+        '500':
+          $ref: './common.oas2.yml#/responses/500'
+      tags:
+        - Datasets
+      description: Obtain a specific dataset
+    put:
+      operationId: PUT_datasets
+      summary: Update Dataset
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/dataset-partial'
+            example:
+              name: GeoNode dataset's new name
+              completed: false
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/dataset-full'
+          examples:
+            application/json:
+              id: 9000
+              name: It's Over 9000!!!
+              completed: true
+              completed_at: null
+              created_at: '2014-08-28T14:14:28.494Z'
+              updated_at: '2015-08-28T14:14:28.494Z'
+        '401':
+          $ref: './common.oas2.yml#/responses/401'
+        '404':
+          $ref: './common.oas2.yml#/responses/404'
+        '500':
+          $ref: './common.oas2.yml#/responses/500'
+      security:
+        - apikey: []
+      tags:
+        - Datasets
+      description: Modify a specific dataset
+    delete:
+      operationId: DELETE_dataset
+      summary: Delete Dataset
+      responses:
+        '204':
+          description: ''
+        '401':
+          $ref: './common.oas2.yml#/responses/401'
+        '404':
+          $ref: './common.oas2.yml#/responses/404'
+        '500':
+          $ref: './common.oas2.yml#/responses/500'
+      security:
+        - apikey: []
+      tags:
+        - Datasets
+      description: 'Remove a '
+  /datasets:
+    post:
+      operationId: POST_datasets
+      summary: Create Dataset
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/dataset-partial'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/dataset-full'
+          examples:
+            application/json:
+              id: 9000
+              name: It's Over 9000!!!
+              completed: null
+              completed_at: null
+              created_at: '2014-08-28T14:14:28.494Z'
+              updated_at: '2014-08-28T14:14:28.494Z'
+        '401':
+          $ref: './common.oas2.yml#/responses/401'
+        '500':
+          $ref: './common.oas2.yml#/responses/500'
+      security:
+        - apikey: []
+      description: |-
+        This creates a Dataset object.
+
+        Testing `inline code`.
+      tags:
+        - Datasets
+    get:
+      operationId: GET_datasets
+      summary: List Datasets
+      parameters:
+        - $ref: '#/parameters/limit'
+        - $ref: '#/parameters/skip'
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/dataset-full'
+          examples:
+            application/json:
+              - id: 1
+                name: design the thingz
+                completed: true
+              - id: 2
+                name: mock the thingz
+                completed: true
+              - id: 3
+                name: code the thingz
+                completed: false
+            empty: []
+        '500':
+          $ref: './common.oas2.yml#/responses/500'
+      tags:
+        - Datasets
+      description: Obtain the lists of datasets
+parameters:
+  limit:
+    name: limit
+    in: query
+    description: This is how it works.
+    required: false
+    type: integer
+    maximum: 100
+  skip:
+    name: skip
+    in: query
+    required: false
+    type: string
+definitions:
+  dataset-partial:
+    title: Dataset Partial
+    type: object
+    properties:
+      name:
+        type: string
+    required:
+      - name
+  dataset-full:
+    title: Dataset Full
+    allOf:
+      - $ref: '#/definitions/dataset-partial'
+      - type: object
+        properties:
+          uuid:
+            type: string
+          completed_at:
+            type:
+              - string
+              - 'null'
+            format: date-time
+          created_at:
+            type: string
+            format: date-time
+          updated_at:
+            type: string
+            format: date-time
+        required:
+          - uuid
+tags:
+  - name: Datasets
+security:
+  - apikey: []
