@@ -101,7 +101,7 @@ scenarios:
         description: We should get a 404 back after deleting.
         input:
           method: get
-          url: 'http://api.geonode.org/datasets/{$.ctx.datasetUuid}'
+          url: '{$$.env.host}/datasets/{$.ctx.datasetUuid}'
           query:
             apikey: '{$$.env.apikey}'
           params:
