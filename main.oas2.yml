@@ -1,22 +1,23 @@
 swagger: '2.0'
 info:
   version: '1.0'
-  title: To-do Demo
+  title: GeoNode API Demo
   description: >-
     This OAS2 (Swagger 2) file represents a real API that lives at
-    http://todos.stoplight.io.
+    http://api.geonode.org.
 
 
     For authentication information, click the apikey security scheme in the
     editor sidebar.
   contact:
-    name: Stoplight
-    url: 'https://stoplight.io'
+    name: GeoNode Development Team
+    url: 'http://geonode.org'
   license:
-    name: MIT
-host: todos.stoplight.io
+    name: GPL-3.0
+host: api.geonode.org
 schemes:
   - http
+  - https
 consumes:
   - application/json
 produces:
@@ -228,3 +229,5 @@ definitions:
           - user
 tags:
   - name: Todos
+security:
+  - apikey: []
