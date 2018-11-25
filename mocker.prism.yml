@@ -8,10 +8,10 @@ description: >-
   mock server functionality.
 
 
-  Try sending a test request to `/todos`. This will return the mocked equivalent
-  of `http://todos.stoplight.io/todos`.
+  Try sending a test request to `/datasets`. This will return the mocked
+  equivalent of `http://api.geonode.org/datasets`.
 apis:
-  - id: todos
+  - id: datasets
     specs:
       - ./main.oas2.yml
 rules:
