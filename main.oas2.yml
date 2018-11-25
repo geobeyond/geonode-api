@@ -59,10 +59,8 @@ paths:
       tags:
         - Datasets
     put:
-      operationId: PUT_todos
-      summary: Update Todo
-      tags:
-        - Todos
+      operationId: PUT_datasets
+      summary: Update Dataset
       parameters:
         - name: body
           in: body
@@ -92,6 +90,8 @@ paths:
           $ref: './common.oas2.yml#/responses/500'
       security:
         - apikey: []
+      tags:
+        - Datasets
     delete:
       operationId: DELETE_dataset
       summary: Delete Dataset
