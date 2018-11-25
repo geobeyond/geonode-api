@@ -75,7 +75,8 @@ scenarios:
         name: Update Dataset
         input:
           method: put
-          url: '{$$.env.host}/todos/{$.ctx.todoId}?apikey={$$.env.todosApiKey}'
+          url: >-
+            {$$.env.host}/datasets/{$.ctx.datasetUiid}?apikey={$$.env.datasetsApiKey}
           body:
             name: string
             completed:
@@ -92,7 +93,8 @@ scenarios:
         name: Delete Dataset
         input:
           method: delete
-          url: '{$$.env.host}/todos/{$.ctx.todoId}?apikey={$$.env.todosApiKey}'
+          url: >-
+            {$$.env.host}/datasets/{$.ctx.datasetUiid}?apikey={$$.env.datasetsApiKey}
         after:
           assertions:
             - target: output.status
