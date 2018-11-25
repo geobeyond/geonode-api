@@ -1,0 +1,179 @@
+title: My Hub
+logo: 'https://next.stoplight.io/images/mark-light-bg.png'
+header:
+  nav:
+    left: []
+    right:
+      - path: /api-reference
+        title: API Reference
+      - title: Help
+        path: 'https://docs.stoplight.io'
+pages:
+  /:
+    title: Welcome
+    data:
+      blocks:
+        - type: text
+          data: "# Welcome!\n\nThis is a quick little starter hub for your new project.\n\n1. This project is meant to work with the API running at http://todos.stoplight.io.\n2. This hub pulls together data from several other sources (like the main.oas2 file in this project) to render its content.\n3. Open the project file explorer by clicking the file icon in the left gutter.\n4. Click through the files to view their editors and make changes. Each file has an extension that indicates its type.\n5. Stoplight currently supports 5 extensions:\n\t- .hub: Technical documentation.\n\t- .oas2: API Design + Modeling.\n\t- .scenarios: API Testing + Orchestration.\n\t- .prism: API Mocking + Validation.\n\t- .md: Snippets of documentation.\n\t- _.oas3: Coming Soon!_\n\n__If you make changes to any of the files, don't forget to click the \"Save\" button, located in the top left of the editors.__"
+        - type: callout
+          data:
+            title: Quickstart
+            body: >-
+              There are various files displayed in the file explorer to the
+              left, organized by type (click file button in gutter if you don't
+              see the list).
+
+
+              1. **Modeling**: Get started with our OAS/Swagger editor.
+
+              2. **Scenarios**: Create API tests (and contract tests!) with our
+              Scenarios editor.
+
+              3. **Prism**: Create different types of servers (mocking,
+              validation, etc) with Prism.
+
+
+              **Bonus**: Connect your files together with references to
+              supercharge them!
+        - type: text
+          data: >-
+            ## Testing
+
+
+            - The tests.scenarios in this project leverages the main.oas2 file
+            to power its contract testing.
+
+            - _NOTE_: The todo-partial model in the main.oas2 file intentially
+            includes a required “user” property that will cause the tests to
+            fail. This is because the actual todos.stoplight.io API does not
+            return a user property. Try it out by navigating to the
+            tests.scenarios file and running the collection!
+
+
+            ## Modeling Features
+
+
+            - This project includes two OAS2 (Swagger 2) files - common.oas2 and
+            main.oas2.
+
+            - This main.oas2 leverages the JSON Schema allOf property
+            (inheritance), shared parameters (common query string), and shared
+            responses (common error codes).
+
+            - This main.oas2 specification references data defined in the
+            common.oas2 specification. Check out the “user” property in the
+            todo-full model. It references the common.oas2 file in this project,
+            but could easily reference a file in another project. This lets you
+            build up shared libraries of data for your organization.
+
+            - You can quickly send requests to the To-dos API by clicking the
+            “HTTP Request Maker” tab at the bottom of the modeling editor.
+
+            - While the HTTP Request Maker is open, you can navigate through
+            operations in the editor sidebar to quickly update the request from
+            your OAS specification.
+
+            - If you have prism files in this project, you can select their host
+            to send requests to them instead. Try sending a request to the
+            mock.prism instance, its running a mock API based on this
+            specification!
+        - type: callout
+          data:
+            type: info
+            title: Edit This Hub
+            body: >-
+              Click the **"Design"** button in the top left. Note that you must
+              have write access to this project to see the button.
+        - type: tabs
+          data:
+            children:
+              - title: Get a Cat
+                blocks:
+                  - type: text
+                    data: >-
+                      Because cats are fun, here's a cat! This also demonstrates
+                      a more complicated widget - text and http blocks nested
+                      inside of a tabs block.
+                  - type: http
+                    header:
+                      title: Get Cat Gif
+                    data:
+                      url: 'http://thecatapi.com/api/images/get'
+                      method: get
+                      query:
+                        format: src
+                        type: gif
+              - title: JSON Schema
+                blocks:
+                  - type: text
+                    data: >-
+                      A simple example of a tabbed component, with multiple
+                      child blocks (and JSON Schema!).
+                  - type: jsonSchema
+                    data:
+                      type: object
+                      description: A random little user object.
+                      properties:
+                        data:
+                          type: object
+                          required:
+                            - id
+                            - username
+                            - email
+                          properties:
+                            id:
+                              type: number
+                              minimum: 0
+                              maximum: 65000
+                            username:
+                              type: string
+                            email:
+                              type: string
+                              format: email
+                            tags:
+                              type: array
+                              items:
+                                type: string
+                      required:
+                        - data
+  /api-reference:
+    title: API Reference
+    data:
+      children:
+        - title: Introduction
+          route:
+            path: /intro
+          data:
+            blocks:
+              - type: text
+                data: >-
+                  # Introduction
+
+
+                  This API Reference shows how you can pull in OAS2 (Swagger)
+                  data that is managed outside of this hub.
+
+
+                  - The To-dos API data is being fetched from the main.oas2 file
+                  in this project.
+
+                  - The Giphy API data is being fetched from a GitHub Gist.
+
+
+                  This makes it easy for other teams or processes (code
+                  generation, etc) to update your Open API files. Whenever they
+                  are updated, this hub will be updated - easy as pie!
+
+
+                  Switch to edit mode (Click **"Design"** in the top left) to
+                  see how the To-do and Giphy APIs are setup.
+        - title: To-dos API
+          route:
+            path: /todos-api
+          data:
+            $ref: ./main.oas2.yml
+        - title: Giphy API
+          route:
+            path: /giphy-api
+          data:
+            $ref: 'https://next.stoplight.io/misc/oas/giphy-oas.json'
