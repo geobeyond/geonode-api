@@ -29,17 +29,15 @@ securityDefinitions:
     in: query
     description: '#### Use ?apikey=123 to authenticate requests. Super secure, we know ;).'
 paths:
-  '/todos/{todoId}':
+  '/datasets/{datasetId}':
     parameters:
       - name: datasetId
         in: path
-        required: true
         type: string
+        required: true
     get:
-      operationId: GET_todo
-      summary: Get Todo
-      tags:
-        - Todos
+      operationId: GET_dataset
+      summary: Get Dataset
       responses:
         '200':
           description: ''
@@ -58,6 +56,8 @@ paths:
           $ref: './common.oas2.yml#/responses/404'
         '500':
           $ref: './common.oas2.yml#/responses/500'
+      tags:
+        - Datasets
     put:
       operationId: PUT_todos
       summary: Update Todo
@@ -93,10 +93,8 @@ paths:
       security:
         - apikey: []
     delete:
-      operationId: DELETE_todo
-      summary: Delete Todo
-      tags:
-        - Todos
+      operationId: DELETE_dataset
+      summary: Delete Dataset
       responses:
         '204':
           description: ''
@@ -108,6 +106,8 @@ paths:
           $ref: './common.oas2.yml#/responses/500'
       security:
         - apikey: []
+      tags:
+        - Datasets
   /datasets:
     post:
       operationId: POST_datasets
