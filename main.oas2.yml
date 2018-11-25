@@ -108,12 +108,10 @@ paths:
           $ref: './common.oas2.yml#/responses/500'
       security:
         - apikey: []
-  /todos:
+  /datasets:
     post:
-      operationId: POST_todos
+      operationId: POST_datasets
       summary: Create Todo
-      tags:
-        - Todos
       parameters:
         - name: body
           in: body
@@ -142,14 +140,14 @@ paths:
       security:
         - apikey: []
       description: |-
-        This creates a Todo object.
+        This creates a Dataset object.
 
         Testing `inline code`.
-    get:
-      operationId: GET_todos
-      summary: List Todos
       tags:
-        - Todos
+        - Datasets
+    get:
+      operationId: GET_datasets
+      summary: List Datasets
       parameters:
         - $ref: '#/parameters/limit'
         - $ref: '#/parameters/skip'
@@ -174,6 +172,8 @@ paths:
             empty: []
         '500':
           $ref: './common.oas2.yml#/responses/500'
+      tags:
+        - Datasets
 parameters:
   limit:
     name: limit
@@ -188,19 +188,14 @@ parameters:
     required: false
     type: string
 definitions:
-  todo-partial:
-    title: Todo Partial
+  dataset-partial:
+    title: Dataset Partial
     type: object
     properties:
       name:
         type: string
-      completed:
-        type:
-          - boolean
-          - 'null'
     required:
       - name
-      - completed
   todo-full:
     title: Todo Full
     allOf:
@@ -229,5 +224,6 @@ definitions:
           - user
 tags:
   - name: Todos
+  - name: Datasets
 security:
   - apikey: []
