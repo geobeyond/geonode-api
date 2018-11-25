@@ -32,6 +32,9 @@ securityDefinitions:
     type: apiKey
     in: header
     name: X-GEONODE-APIKEY
+    description: >-
+      #### Use custom header X-GEONODE-APIKEY=123 to authenticate requests.
+      Super secure, we know ;).
 paths:
   '/datasets/{datasetUuid}':
     parameters:
