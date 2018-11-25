@@ -33,8 +33,8 @@ settings:
       - ./main.oas2.yml
 before: {}
 scenarios:
-  todo-crud:
-    name: Todo CRUD
+  dataset-crud:
+    name: Dataset CRUD
     steps:
       - type: http
         name: Create Dataset
