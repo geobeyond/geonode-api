@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   version: '1.0'
-  title: To-do Demo
+  title: GeoNode API Demo
   description: >-
     ### Notes:
 
@@ -10,18 +10,18 @@ info:
     that other specifications may reference.
 
 
-    For example, check out the user poperty in the main.oas2 todo-partial model
-    - it references the user model in this specification!
+    For example, check out the user poperty in the main.oas2 dataset-partial
+    model - it references the dataset model in this specification!
 
 
     Likewise, the main.oas2 operations reference the shared error responses in
     this common specification.
   contact:
-    name: Stoplight
-    url: 'https://stoplight.io'
+    name: GeoNode Development Team
+    url: 'http://geonode.org'
   license:
-    name: MIT
-host: example.com
+    name: GPL-3.0
+host: geonode.org
 securityDefinitions: {}
 paths: {}
 responses:
@@ -83,3 +83,10 @@ definitions:
     required:
       - status
       - error
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
