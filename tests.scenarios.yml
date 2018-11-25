@@ -62,15 +62,15 @@ scenarios:
         name: Get Dataset
         input:
           method: get
-          url: '{$$.env.host}/todos/{$.ctx.todoId}'
+          url: '{$$.env.host}/datasets/{$.ctx.datasetUuid}'
         after:
           assertions:
             - target: output.status
               op: eq
               expected: 200
           transforms:
-            - target: $.ctx.id
-              source: output.body.id
+            - target: $.ctx.uuid
+              source: output.body.uuid
       - type: http
         name: Update Dataset
         input:
