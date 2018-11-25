@@ -31,7 +31,7 @@ securityDefinitions:
 paths:
   '/todos/{todoId}':
     parameters:
-      - name: todoId
+      - name: datasetId
         in: path
         required: true
         type: string
