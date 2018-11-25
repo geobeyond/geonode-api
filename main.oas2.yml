@@ -29,9 +29,9 @@ securityDefinitions:
     in: query
     description: '#### Use ?apikey=123 to authenticate requests. Super secure, we know ;).'
 paths:
-  '/datasets/{datasetId}':
+  '/datasets/{datasetUuid}':
     parameters:
-      - name: datasetId
+      - name: datasetUuid
         in: path
         type: string
         required: true
