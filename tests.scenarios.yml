@@ -40,7 +40,7 @@ scenarios:
         name: Create Dataset
         input:
           method: post
-          url: '{$$.env.host}/todos?apikey={$$.env.todosApiKey}'
+          url: '{$$.env.host}/datasets'
           body:
             name: string
             completed:
@@ -48,6 +48,8 @@ scenarios:
               - 'null'
           headers:
             Content-Type: application/json
+          query:
+            apikey: '{$$.env.datasetsApiKey}'
         after:
           assertions:
             - target: output.status
