@@ -1,119 +1,149 @@
-scenarioVersion: '1.1'
-name: To-dos API Tests
-description: >-
-  **These scenarios test the Datasets API described in the main.oas2 file
-  (linked in left file tree).**
-
-
-  The settings in the "Swagger/OAS Coverage" section linked in the editor
-  sidebar automatically add contract testing when we run this collection.
-
-
-  **Don’t forget to set the two environment variables below, where the orange
-  exlamation point is!!**
-
-
-  *host:* http://api.geonode.org
-
-
-  *datasetsApiKey:* 123
-
-
-  **After setting the environment variables, click “Run Collection” at the top
-  of the editor.**
-
-
-  Note: some tests will fail. This is because the main.oas2 file describes a
-  required user property that the API does not actually return. Try removing
-  that property from the main.oas2 file, saving it, and then re-running these
-  scenarios.
-settings:
-  testing:
-    oas2:
-      - ./main.oas2.yml
-before: {}
-scenarios:
-  dataset-crud:
-    name: Dataset CRUD
-    steps:
-      - type: http
-        name: Create Dataset
-        input:
-          method: post
-          url: '{$$.env.host}/datasets'
-          body:
-            name: string
-            completed:
-              - boolean
-              - 'null'
-          headers:
-            Content-Type: application/json
-          query:
-            apikey: '{$$.env.datasetsApiKey}'
-        after:
-          assertions:
-            - target: output.status
-              op: eq
-              expected: 201
-          transforms:
-            - target: $.ctx.todoId
-              source: output.body.id
-      - type: http
-        name: Get Dataset
-        input:
-          method: get
-          url: '{$$.env.host}/datasets/{$.ctx.datasetUuid}'
-        after:
-          assertions:
-            - target: output.status
-              op: eq
-              expected: 200
-          transforms:
-            - target: $.ctx.uuid
-              source: output.body.uuid
-      - type: http
-        name: Update Dataset
-        input:
-          method: put
-          url: >-
-            {$$.env.host}/datasets/{$.ctx.datasetUiid}?apikey={$$.env.datasetsApiKey}
-          body:
-            name: string
-            completed:
-              - boolean
-              - 'null'
-          headers:
-            Content-Type: application/json
-        after:
-          assertions:
-            - target: output.status
-              op: eq
-              expected: 200
-      - type: http
-        name: Delete Dataset
-        input:
-          method: delete
-          url: >-
-            {$$.env.host}/datasets/{$.ctx.datasetUiid}?apikey={$$.env.datasetsApiKey}
-        after:
-          assertions:
-            - target: output.status
-              op: eq
-              expected: 204
-      - type: http
-        name: Make Sure Deleted
-        description: We should get a 404 back after deleting.
-        input:
-          method: get
-          url: '{$$.env.host}/datasets/{$.ctx.datasetUuid}'
-          query:
-            apikey: '{$$.env.apikey}'
-          params:
-            datasetUuid: ''
-        after:
-          assertions:
-            - target: output.status
-              op: eq
-              expected: 404
-after: {}
-utilities: {}
+{
+  "scenarioVersion": "1.1",
+  "name": "Datasets API Tests",
+  "description": "**These scenarios test the Datasets API described in the main.oas2 file (linked in left file tree).**\n\nThe settings in the \"Swagger/OAS Coverage\" section linked in the editor sidebar automatically add contract testing when we run this collection.\n\n**Don’t forget to set the two environment variables below, where the orange exlamation point is!!**\n\n*host:* http://api.geonode.org\n\n*datasetsApiKey:* 123\n\n**After setting the environment variables, click “Run Collection” at the top of the editor.**\n\nNote: some tests will fail. This is because the main.oas2 file describes a required user property that the API does not actually return. Try removing that property from the main.oas2 file, saving it, and then re-running these scenarios.",
+  "settings": {
+    "testing": {
+      "oas2": [
+        "./main.oas2.yml"
+      ]
+    }
+  },
+  "before": {},
+  "scenarios": {
+    "dataset-crud": {
+      "name": "Dataset CRUD",
+      "steps": [
+        {
+          "type": "http",
+          "name": "Create Dataset",
+          "input": {
+            "method": "post",
+            "url": "{$$.env.host}/datasets",
+            "body": {
+              "name": "string",
+              "completed": [
+                "boolean",
+                "null"
+              ]
+            },
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "query": {
+              "apikey": "{$$.env.datasetsApiKey}"
+            }
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 201
+              }
+            ],
+            "transforms": [
+              {
+                "target": "$.ctx.datasetUuid",
+                "source": "output.body.id"
+              }
+            ]
+          }
+        },
+        {
+          "type": "http",
+          "name": "Get Dataset",
+          "input": {
+            "method": "get",
+            "url": "{$$.env.host}/datasets/{$.ctx.datasetUuid}"
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 200
+              }
+            ],
+            "transforms": [
+              {
+                "target": "$.ctx.uuid",
+                "source": "output.body.uuid"
+              }
+            ]
+          }
+        },
+        {
+          "type": "http",
+          "name": "Update Dataset",
+          "input": {
+            "method": "put",
+            "url": "{$$.env.host}/datasets/{$.ctx.datasetUiid}?apikey={$$.env.datasetsApiKey}",
+            "body": {
+              "name": "string",
+              "completed": [
+                "boolean",
+                "null"
+              ]
+            },
+            "headers": {
+              "Content-Type": "application/json"
+            }
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 200
+              }
+            ]
+          }
+        },
+        {
+          "type": "http",
+          "name": "Delete Dataset",
+          "input": {
+            "method": "delete",
+            "url": "{$$.env.host}/datasets/{$.ctx.datasetUuid}?apikey={$$.env.datasetsApiKey}"
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 204
+              }
+            ]
+          }
+        },
+        {
+          "type": "http",
+          "name": "Make Sure Deleted",
+          "description": "We should get a 404 back after deleting.",
+          "input": {
+            "method": "get",
+            "url": "{$$.env.host}/datasets/{$.ctx.datasetUuid}",
+            "query": {
+              "apikey": "{$$.env.apikey}"
+            },
+            "params": {
+              "datasetUuid": ""
+            }
+          },
+          "after": {
+            "assertions": [
+              {
+                "target": "output.status",
+                "op": "eq",
+                "expected": 404
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "after": {},
+  "utilities": {}
+}
