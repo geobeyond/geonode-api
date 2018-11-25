@@ -111,15 +111,12 @@ paths:
   /datasets:
     post:
       operationId: POST_datasets
-      summary: Create Todo
+      summary: Create Dataset
       parameters:
         - name: body
           in: body
           schema:
-            $ref: '#/definitions/todo-partial'
-            example:
-              name: my todo's name
-              completed: false
+            $ref: '#/definitions/dataset-partial'
       responses:
         '201':
           description: ''
