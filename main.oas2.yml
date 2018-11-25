@@ -203,10 +203,8 @@ definitions:
       - $ref: '#/definitions/dataset-partial'
       - type: object
         properties:
-          id:
-            type: integer
-            minimum: 0
-            maximum: 1000000
+          uuid:
+            type: string
           completed_at:
             type:
               - string
@@ -218,11 +216,8 @@ definitions:
           updated_at:
             type: string
             format: date-time
-          user:
-            $ref: './common.oas2.yml#/definitions/user'
         required:
-          - id
-          - user
+          - uuid
 tags:
   - name: Datasets
 security:
