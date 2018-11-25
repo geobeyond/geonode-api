@@ -58,7 +58,7 @@ paths:
           $ref: './common.oas2.yml#/responses/500'
       tags:
         - Datasets
-      description: Obtain the lists of datasets
+      description: Obtain a specific dataset
     put:
       operationId: PUT_datasets
       summary: Update Dataset
@@ -93,6 +93,7 @@ paths:
         - apikey: []
       tags:
         - Datasets
+      description: Modify a specific dataset
     delete:
       operationId: DELETE_dataset
       summary: Delete Dataset
@@ -109,6 +110,7 @@ paths:
         - apikey: []
       tags:
         - Datasets
+      description: 'Remove a '
   /datasets:
     post:
       operationId: POST_datasets
@@ -172,6 +174,7 @@ paths:
           $ref: './common.oas2.yml#/responses/500'
       tags:
         - Datasets
+      description: Obtain the lists of datasets
 parameters:
   limit:
     name: limit
