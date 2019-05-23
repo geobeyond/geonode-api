@@ -5,6 +5,8 @@ from starlette.requests import Request
 from app.api.api_v1.api import api_router
 from app.core import config
 from app.db.session import Session
+from app.utils import custom_openapi
+
 
 app = FastAPI(title=config.PROJECT_NAME, openapi_url="/api/v1/openapi.json")
 
@@ -27,6 +29,7 @@ if config.BACKEND_CORS_ORIGINS:
 
 app.include_router(api_router, prefix=config.API_V1_STR)
 
+app.openapi_schema = custom_openapi(app, config)
 
 @app.middleware("http")
 async def db_session_middleware(request: Request, call_next):

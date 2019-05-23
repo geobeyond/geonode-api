@@ -9,6 +9,7 @@ from emails.template import JinjaTemplate
 from jwt.exceptions import InvalidTokenError
 
 from app.core import config
+from fastapi.openapi.utils import get_openapi
 
 password_reset_jwt_subject = "preset"
 
@@ -109,3 +110,30 @@ def verify_password_reset_token(token) -> Optional[str]:
         return decoded_token["email"]
     except InvalidTokenError:
         return None
+
+
+def custom_openapi(app, config):
+    if not app.openapi_schema:
+        openapi_schema = get_openapi(
+            title=config.PROJECT_NAME,
+            version=app.version,
+            description=config.INFO_DESCRIPTION,
+            routes=app.routes
+        )
+        contact = dict(
+            email=config.INFO_CONTACT_EMAIL,
+            name=config.INFO_CONTACT_NAME,
+            url=config.INFO_CONTACT_URL
+        )
+        openapi_schema["info"]["contact"] = contact
+        license = dict(
+            name=config.INFO_LICENSE_NAME,
+            url=config.INFO_LICENSE_URL
+        )
+        openapi_schema["info"]["license"] = license
+        terms_of_service = config.INFO_TERMSOFSERVICE
+        openapi_schema["info"]["termsOfService"] = terms_of_service
+        keywords = config.INFO_X_KEYWORDS.split(",")
+        openapi_schema["info"]["x-keywords"] = keywords
+        app.openapi_schema = openapi_schema
+        return app.openapi_schema
