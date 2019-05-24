@@ -6,7 +6,7 @@ from app.models.conformance import Conformance, conformanceClassesEnum, reqClass
 router = APIRouter()
 
 
-@router.get("/conformance", response_model=Conformance, status_code=200)
+@router.get("/conformance/", response_model=Conformance, status_code=200)
 def read_wps_api_conformance():
     """
     Retrieve API conformance definition.

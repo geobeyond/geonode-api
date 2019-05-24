@@ -1,4 +1,5 @@
 import os
+from enum import Enum
 
 
 def getenv_boolean(var_name, default_value=False):
@@ -52,6 +53,9 @@ FIRST_SUPERUSER_PASSWORD = os.getenv("FIRST_SUPERUSER_PASSWORD")
 
 USERS_OPEN_REGISTRATION = getenv_boolean("USERS_OPEN_REGISTRATION")
 
+# WPS ROUTING
+WPS_LOCATION = "wps"
+
 # OPENAPI CONFIG
 INFO_CONTACT_EMAIL = os.getenv("INFO_CONTACT_EMAIL")
 INFO_CONTACT_NAME = os.getenv("INFO_CONTACT_NAME")
@@ -61,3 +65,55 @@ INFO_LICENSE_NAME = os.getenv("INFO_LICENSE_NAME")
 INFO_LICENSE_URL = os.getenv("INFO_LICENSE_URL")
 INFO_TERMSOFSERVICE = os.getenv("INFO_TERMSOFSERVICE")
 INFO_X_KEYWORDS = os.getenv("INFO_X_KEYWORDS")
+
+# LINKS
+class ApplicationType(str, Enum):
+    JSON = "application/json"
+    OPENAPI = "application/openapi+json;version=3.0"
+    HTML = "text/html"
+
+
+class WPSRel(str, Enum):
+    SELF = "self"
+    SERVICE = "service"
+    CONFORMANCE = "conformance"
+    PROCESSES = "processes"
+
+
+class Lang(str, Enum):
+    EN = "en-US"
+
+
+class Title(str, Enum):
+    SELF = "this document"
+    SERVICE = "the API definition"
+    CONFORMANCE = "\
+WPS REST/JSON Binding 1.0 conformance classes implemented by this server"
+    PROCESSES = "Metadata about the processes"
+
+
+def get_wps_link(location, rel, apptype, lang, title):
+    return {
+        "href": f"{SERVER_HOST}{API_V1_STR}/{location}/",
+        "rel": rel,
+        "type": apptype,
+        "hreflang": lang,
+        "title": title
+    }
+
+
+WPS_SELF_LINK = get_wps_link(
+    WPS_LOCATION,
+    WPSRel.SELF,
+    ApplicationType.JSON,
+    Lang.EN,
+    Title.SELF
+)
+
+WPS_SERVICE_LINK = {
+    "href": f"{SERVER_HOST}{API_V1_STR}/openapi.json",
+    "rel": WPSRel.SERVICE,
+    "type": ApplicationType.OPENAPI,
+    "hreflang": Lang.EN,
+    "title": Title.SERVICE
+}
