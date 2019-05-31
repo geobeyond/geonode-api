@@ -16,7 +16,7 @@ from app.core.config import (
 router = APIRouter()
 
 
-@router.get("/", response_model=Link, status_code=200)
+@router.get("/", operation_id="getApiDescription", response_model=Link, status_code=200)
 #def read_wps_landing_page(
 #        links: List[link] = Body(
 #            ...,
