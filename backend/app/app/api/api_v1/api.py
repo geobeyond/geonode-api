@@ -1,7 +1,15 @@
 from fastapi import APIRouter
 from fastapi.routing import APIRoute
 
-from app.api.api_v1.endpoints import items, login, users, utils, conformance, root
+from app.api.api_v1.endpoints import (
+    items,
+    login,
+    users,
+    utils,
+    conformance,
+    root,
+    processes
+)
 from app.core.config import WPS_LOCATION, WPSRel
 
 api_router = APIRouter()
@@ -18,4 +26,9 @@ api_router.include_router(
     conformance.router,
     prefix=f"/{WPS_LOCATION}",
     tags=[WPSRel.CONFORMANCE.value]
+)
+api_router.include_router(
+    processes.router,
+    prefix=f"/{WPS_LOCATION}",
+    tags=[WPSRel.PROCESSES.value]
 )
