@@ -4,6 +4,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
+from app import crud
 from app.api.utils.db import get_db
 from app.api.utils.security import get_current_active_user
 from app.db_models.user import User as DBUser
@@ -28,6 +29,12 @@ def read_wps_processes(
     """
     Retrieve available processes.
     """
+    if crud.user.is_superuser(current_user):
+        processes = crud.process.get_multi(db, skip=skip, limit=limit)
+    else:
+        processes = crud.process.get_multi_by_owner(
+            db_session=db, owner_id=current_user.id, skip=skip, limit=limit
+        )
 
     mocked_processes = {
         "processes": [
