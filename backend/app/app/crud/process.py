@@ -11,6 +11,10 @@ def get(db_session: Session, *, pid: int) -> Optional[Process]:
     return db_session.query(Process).filter(Process.pid == pid).first()
 
 
+def get_by_id(db_session: Session, *, id: int) -> Optional[Process]:
+    return db_session.query(Process).filter(Process.id == id).first()
+
+
 def get_multi(db_session: Session, *, skip=0, limit=100) -> List[Optional[Process]]:
     return db_session.query(Process).offset(skip).limit(limit).all()
 

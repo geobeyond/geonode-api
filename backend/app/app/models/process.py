@@ -1,6 +1,6 @@
 from typing import List
 from enum import Enum
-from pydantic import BaseModel, UrlStr
+from pydantic import BaseModel, UrlStr, Schema, Json
 from app.models.common import link
 
 
@@ -14,7 +14,15 @@ class descriptionType(BaseModel):
     title: str = None
     description: str = None
     keywords: List[str] = None
-    metadata: List[metadataType] = None
+    metadata_: List[metadataType] = Schema(None, alias="metadata")
+
+
+# class descriptionTypeOut(BaseModel):
+#     id: str = ...
+#     title: str = None
+#     description: str = None
+#     keywords: Json = None
+#     metadata_: Json = Schema(None, alias="metadata")
 
 
 class jobControlOptionsType(str, Enum):
@@ -35,13 +43,21 @@ class processSummary(descriptionType):
     links: List[link]
 
 
+# class processSummaryOut(descriptionTypeOut):
+#     id: str = ...
+#     version: str = ...
+#     jobControlOptions: Json
+#     outputTransmission: Json
+#     links: Json
+
+
 # Shared properties
-class ProcessBase(BaseModel):
-    processes: List[processSummary] = []
-
-
-class processCollection(ProcessBase):
+class ProcessBase(processSummary):
     pass
+
+
+class processCollection(BaseModel):
+    processes: List[processSummary] = []
 
 
 # Properties to receive on process creation
@@ -58,3 +74,13 @@ class ProcessUpdate(ProcessBase):
 class ProcessInDBBase(ProcessBase):
     pid: int
     owner_id: int
+
+
+# Properties to return to client
+class Process(ProcessInDBBase):
+    pass
+
+
+# Properties properties stored in DB
+class ProcessInDB(ProcessInDBBase):
+    pass

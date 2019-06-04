@@ -1,14 +1,17 @@
 import json
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app import crud
 from app.api.utils.db import get_db
 from app.api.utils.security import get_current_active_user
 from app.db_models.user import User as DBUser
-from app.models.process import processCollection
+from app.models.process import processCollection, Process, ProcessCreate
+
+import logging
+logger = logging.getLogger("uvicorn")
 
 
 router = APIRouter()
@@ -35,41 +38,28 @@ def read_wps_processes(
         processes = crud.process.get_multi_by_owner(
             db_session=db, owner_id=current_user.id, skip=skip, limit=limit
         )
+    return {"processes": processes}
 
-    mocked_processes = {
-        "processes": [
-            {
-                "id": "buffer",
-                "title": "Buffer process",
-                "description": "Process that buffers features",
-                "keywords": [
-                    "buffer"
-                ],
-                "metadata": [
-                    {
-                        "role": "self",
-                        "href": "https://processing.example.org/processes/buffer"
-                    }
-                ],
-                "links": [
-                    {
-                        "href": "https://processing.example.org/processes/buffer",
-                        "rel": "self",
-                        "type": "jjjj",
-                        "hreflang": "en",
-                        "title": "buffer"
-                    }
-                ],
-                "version": "1.1",
-                "jobControlOptions": [
-                    "sync-execute",
-                    "async-execute"
-                ],
-                "outputTransmission": [
-                    "value",
-                    "reference"
-                ]
-            }
-        ]
-    }
-    return mocked_processes
+
+@router.post(
+    "/processes/",
+    operation_id="createProcess",
+    response_model=Process,
+    status_code=200,
+    include_in_schema=False
+)
+def create_process(
+    *,
+    db: Session = Depends(get_db),
+    process_in: ProcessCreate,
+    current_user: DBUser = Depends(get_current_active_user),
+):
+    """
+    Create new process.
+    """
+    if not crud.user.is_superuser(current_user):
+        raise HTTPException(status_code=403, detail="You are not allowed to register processes")
+    elif crud.process.get_by_id(db_session=db, id=process_in.id):
+        raise HTTPException(status_code=422, detail="The process has been already created")
+    process = crud.process.create(db_session=db, process_in=process_in, owner_id=current_user.id)
+    return process
