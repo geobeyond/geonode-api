@@ -103,3 +103,9 @@ class formatDescription(format):
 
 class complexDataType(BaseModel):
     formats: List[formatDescription] = ...
+
+
+class format(BaseModel):
+    mimeType: str = ...
+    schema_: str = Schema(None, alias="schema")
+    encoding: str
