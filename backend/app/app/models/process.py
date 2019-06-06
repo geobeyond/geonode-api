@@ -1,25 +1,22 @@
 from typing import List
 from enum import Enum
-from pydantic import BaseModel, UrlStr, Schema, Json
-from app.models.common import link, descriptionType
+from pydantic import BaseModel, Schema
+from app.models.common import link, descriptionType, transmissionMode
 from app.models.input import inputDescription
 from app.models.output import outputDescription
 
 
-class jobControlOptionsType(str, Enum):
+class jobControlOptions(str, Enum):
     SYNC  = 'sync-execute'
     ASYNC = 'async-execute'
-
-
-class transmissionMode(str, Enum):
-    VALUE     = 'value'
-    REFERENCE = 'reference'
 
 
 class processSummary(descriptionType):
     id: str = ...
     version: str = ...
-    jobControlOptions: List[jobControlOptionsType]
+    jobControlOptions_: List[jobControlOptions] = Schema(
+        None, alias="jobControlOptions"
+    )
     outputTransmission: List[transmissionMode]
     links: List[link]
 

@@ -6,22 +6,27 @@ from pydantic import BaseModel, Schema, UrlStr, Union
 class link(BaseModel):
     href: UrlStr = ...
     rel: str = None
-    type: str = None
+    type_: str = Schema(None, alias="type")
     hreflang: str = None
     title: str = None
 
 
-class metadataType(BaseModel):
+class transmissionMode(str, Enum):
+    VALUE     = 'value'
+    REFERENCE = 'reference'
+
+
+class metadata(BaseModel):
     role: str = None
     href: str = None
 
 
 class descriptionType(BaseModel):
-    id: str = ...
+    id_: str = Schema(..., alias="id")
     title: str = None
     description: str = None
     keywords: List[str] = None
-    metadata_: List[metadataType] = Schema(None, alias="metadata")
+    metadata_: List[metadata] = Schema(None, alias="metadata")
 
 
 class dataDescriptionType(descriptionType):
@@ -59,7 +64,7 @@ class allowedRanges(BaseModel):
     allowedRanges_: List[Range] = Schema(None, alias="allowedRanges")
 
 
-class datatypeType(BaseModel):
+class datatype(BaseModel):
     name: str = ...
     reference: UrlStr
 
@@ -77,7 +82,7 @@ class literalDataDomain(BaseModel):
         UrlStr # valuesreference
     ]
     defaultValue: str = None
-    dataType: datatypeType
+    dataType_: datatype = Schema(None, alias="datatype")
     uom: uomType
 
 
