@@ -28,7 +28,6 @@ class processSummary(descriptionType):
 class ProcessBase(processSummary):
     inputs: List[inputDescription]
     outputs: List[outputDescription]
-    executeEndpoint: UrlStr
 
 
 class processCollection(BaseModel):

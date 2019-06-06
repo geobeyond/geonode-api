@@ -1,3 +1,4 @@
+from enum import Enum
 from pydantic import Union
 from app.models.common import (
     dataDescriptionType,
@@ -7,7 +8,11 @@ from app.models.common import (
 )
 
 
+class maxOccursEnum(str, Enum):
+    UNBOUNDED = 'unbounded'
+
+
 class inputDescription(dataDescriptionType):
     input: Union[complexDataType, literalDataType, boundingBoxDataType]
     minOccurs: int
-    maxOccurs: int
+    maxOccurs: Union[int, maxOccursEnum]
