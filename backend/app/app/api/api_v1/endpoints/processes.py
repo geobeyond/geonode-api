@@ -33,7 +33,6 @@ def read_wps_processes(
     db: Session = Depends(get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user: DBUser = Depends(get_current_active_user),
 ):
     """
     Retrieve available processes.
