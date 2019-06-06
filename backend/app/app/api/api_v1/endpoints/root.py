@@ -44,10 +44,9 @@ def read_wps_landing_page():
         link(**WPS_SERVICE_LINK)
     ]
     tags = [route.tags[0] for route in routes if WPS_LOCATION in route.path]
-    links = []
     for tag in tags:
         if tag == WPSRel.CONFORMANCE.value:
-            links.append(link(
+            wps_links.append(link(
                 **get_wps_link(
                     f"{WPS_LOCATION}/{tag}",
                     WPSRel.CONFORMANCE,
@@ -57,14 +56,14 @@ def read_wps_landing_page():
                 )
             ))
         if tag == WPSRel.PROCESSES.value:
-            links.append(link(
-                **get_wps_link(
-                    f"{WPS_LOCATION}/{tag}",
-                    WPSRel.PROCESSES,
-                    ApplicationType.JSON,
-                    Lang.EN,
-                    Title.PROCESSES
-                )
-            ))
-    wps_links += links
+            if not(tag in [link.rel for link in wps_links]):
+                wps_links.append(link(
+                    **get_wps_link(
+                        f"{WPS_LOCATION}/{tag}",
+                        WPSRel.PROCESSES,
+                        ApplicationType.JSON,
+                        Lang.EN,
+                        Title.PROCESSES
+                    )
+                ))
     return root(links=wps_links)
