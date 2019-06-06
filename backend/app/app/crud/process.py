@@ -11,7 +11,7 @@ def get(db_session: Session, *, pid: int) -> Optional[Process]:
     return db_session.query(Process).filter(Process.pid == pid).first()
 
 
-def get_by_id(db_session: Session, *, id: int) -> Optional[Process]:
+def get_by_id(db_session: Session, *, id: str) -> Optional[Process]:
     return db_session.query(Process).filter(Process.id == id).first()
 
 

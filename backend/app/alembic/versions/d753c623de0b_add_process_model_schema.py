@@ -1,8 +1,8 @@
 """Add Process model schema
 
-Revision ID: 5efb633ea595
+Revision ID: d753c623de0b
 Revises: d4867f3a4c0a
-Create Date: 2019-06-04 10:48:56.729652
+Create Date: 2019-06-06 12:59:11.146131
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '5efb633ea595'
+revision = 'd753c623de0b'
 down_revision = 'd4867f3a4c0a'
 branch_labels = None
 depends_on = None
@@ -29,6 +29,8 @@ def upgrade():
     sa.Column('jobControlOptions', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
     sa.Column('outputTransmission', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
     sa.Column('links', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
+    sa.Column('inputs', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
+    sa.Column('outputs', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
     sa.Column('owner_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['owner_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('pid')

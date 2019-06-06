@@ -8,7 +8,13 @@ from app import crud
 from app.api.utils.db import get_db
 from app.api.utils.security import get_current_active_user
 from app.db_models.user import User as DBUser
-from app.models.process import processCollection, Process, ProcessCreate
+from app.models.process import (
+    processCollection,
+    Process,
+    ProcessCreate,
+    processOffering
+)
+
 
 import logging
 logger = logging.getLogger("uvicorn")
@@ -32,12 +38,9 @@ def read_wps_processes(
     """
     Retrieve available processes.
     """
-    if crud.user.is_superuser(current_user):
-        processes = crud.process.get_multi(db, skip=skip, limit=limit)
-    else:
-        processes = crud.process.get_multi_by_owner(
-            db_session=db, owner_id=current_user.id, skip=skip, limit=limit
-        )
+    processes = crud.process.get_multi(db, skip=skip, limit=limit)
+    if not processes:
+        processes = []
     return {"processes": processes}
 
 
@@ -48,14 +51,14 @@ def read_wps_processes(
     status_code=200,
     include_in_schema=False
 )
-def create_process(
+def create_wps_process(
     *,
     db: Session = Depends(get_db),
     process_in: ProcessCreate,
     current_user: DBUser = Depends(get_current_active_user),
 ):
     """
-    Create new process.
+    Create new wps process.
     """
     if not crud.user.is_superuser(current_user):
         raise HTTPException(status_code=403, detail="You are not allowed to register processes")
@@ -63,3 +66,23 @@ def create_process(
         raise HTTPException(status_code=422, detail="The process has been already created")
     process = crud.process.create(db_session=db, process_in=process_in, owner_id=current_user.id)
     return process
+
+
+@router.get(
+    "/processes/{id}",
+    operation_id="getProcessDescription",
+    response_model=processOffering,
+    status_code=200
+)
+def read_wps_process(
+    *,
+    db: Session = Depends(get_db),
+    id: str,
+):
+    """
+    Get a process description.
+    """
+    process = crud.process.get_by_id(db_session=db, id=id)
+    if not process:
+        raise HTTPException(status_code=404, detail=f"The process with id {id} does not exist.")
+    return {"process": process}

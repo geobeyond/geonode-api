@@ -37,10 +37,6 @@ class boundingBoxDataType(BaseModel):
     supportedCRS_: List[supportedCRS] = Schema(None, alias="supportedCRS")
 
 
-class literalDataType(BaseModel):
-    literalDataDomains: List[literalDataDomain] = None
-
-
 class anyValue(BaseModel):
     anyValue_: bool = Schema(None, alias="anyValue")
 
