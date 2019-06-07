@@ -14,6 +14,7 @@ from app.models.process import (
     ProcessCreate,
     processOffering
 )
+from app.models.job import jobCollection
 
 
 import logging
@@ -85,3 +86,34 @@ def read_wps_process(
     if not process:
         raise HTTPException(status_code=404, detail=f"The process with id {id} does not exist.")
     return {"process": process}
+
+
+@router.get(
+    "/processes/{id}/jobs/",
+    operation_id="getJobList",
+    response_model=jobCollection,
+    status_code=200
+)
+def read_wps_jobs_by_process(
+    *,
+    db: Session = Depends(get_db),
+    id: str,
+    current_user: DBUser = Depends(get_current_active_user),
+):
+    """
+    retrieve the list of jobs for a process.
+    """
+    process = crud.process.get_by_id(db_session=db, id=id)
+    if not process:
+        raise HTTPException(
+            status_code=404,
+            detail=f"The process with id {id} does not exist."
+        )
+    jobs = crud.job.get_multi_by_process_by_owner(
+        db_session=db,
+        process_id=process.pid,
+        owner_id=current_user.id
+    )
+    if jobs:
+        return {"jobs": [job.jid for job in jobs]}
+    return {"jobs": []}

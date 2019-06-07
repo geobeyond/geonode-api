@@ -20,3 +20,4 @@ class Process(Base):
     outputs            = Column(postgresql.JSONB)
     owner_id           = Column(Integer, ForeignKey("user.id"))
     owner              = relationship("User", back_populates="processes")
+    jobs               = relationship("Job", back_populates="process")

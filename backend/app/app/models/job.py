@@ -1,6 +1,8 @@
 from typing import List
 from enum import Enum
-from pydantic import Schema, BaseModel, UUID
+from uuid import UUID
+from datetime import datetime
+from pydantic import Schema, BaseModel, UUID4
 from app.models.common import link
 from app.models.input import input as input_
 from app.models.output import output as output_
@@ -30,7 +32,7 @@ class JobBase(statusInfo):
     pass
 
 class jobCollection(BaseModel):
-    jobs: List[UUID] = ...
+    jobs: List[UUID4] = ...
 
 
 # Properties to receive on process creation
@@ -45,8 +47,11 @@ class JobUpdate(JobBase):
 
 # Properties shared by models stored in DB
 class JobInDBBase(JobBase):
-    jid: UUID
+    jid: UUID4 = ...
     owner_id: int
+    process_id: int
+    created_at: datetime = ...
+    updated_at: datetime
 
 
 # Properties to return to client
