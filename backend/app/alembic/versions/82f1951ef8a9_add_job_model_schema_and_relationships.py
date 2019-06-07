@@ -1,8 +1,8 @@
 """Add Job model schema and relationships
 
-Revision ID: 4b268e4dd106
+Revision ID: 82f1951ef8a9
 Revises: d753c623de0b
-Create Date: 2019-06-07 21:50:02.201594
+Create Date: 2019-06-07 22:14:33.279731
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '4b268e4dd106'
+revision = '82f1951ef8a9'
 down_revision = 'd753c623de0b'
 branch_labels = None
 depends_on = None

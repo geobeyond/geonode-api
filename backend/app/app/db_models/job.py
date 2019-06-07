@@ -5,11 +5,20 @@ from sqlalchemy.orm import relationship
 from uuid import uuid4
 
 from app.db.base_class import Base
+from app.models.job import statusEnum
 
 
 class Job(Base):
-    jid         = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
-    status      = Column(String, index=True)
+    jid         = Column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid4
+    )
+    status      = Column(
+        String,
+        index=True,
+        default=statusEnum.ACCEPTED.value
+    )
     message     = Column(String, index=True)
     progress    = Column(Integer, default=0)
     links       = Column(postgresql.JSONB)
