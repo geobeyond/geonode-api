@@ -117,3 +117,11 @@ WPS_SERVICE_LINK = {
     "hreflang": Lang.EN,
     "title": Title.SERVICE
 }
+
+WPS_PROCESS_LINK = {
+    "href": f"{SERVER_HOST}{API_V1_STR}/processes",
+    "rel": WPSRel.PROCESSES,
+    "type": ApplicationType.JSON,
+    "hreflang": Lang.EN,
+    "title": Title.PROCESSES
+}

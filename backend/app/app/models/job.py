@@ -36,7 +36,7 @@ class jobCollection(BaseModel):
 
 
 # Properties to receive on process creation
-class JobCreate(JobBase):
+class JobCreate(execute):
     pass
 
 
@@ -46,7 +46,7 @@ class JobUpdate(JobBase):
 
 
 # Properties shared by models stored in DB
-class JobInDBBase(JobBase):
+class JobInDBBase(JobBase, JobCreate):
     jid: UUID4 = ...
     owner_id: int
     process_id: int
@@ -55,10 +55,10 @@ class JobInDBBase(JobBase):
 
 
 # Properties to return to client
-class Job(JobInDBBase):
+class Job(BaseModel):
     pass
 
 
-# Properties properties stored in DB
+# Properties stored in DB
 class JobInDB(JobInDBBase):
     pass
