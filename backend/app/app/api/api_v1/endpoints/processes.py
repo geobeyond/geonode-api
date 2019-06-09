@@ -166,7 +166,7 @@ def create_wps_job_by_process(
     )
     base_url = WPS_PROCESS_LINK["href"]
     job_id = job.jid
-    location = f"{base_url}/{process_id}/jobs/{job_id}"
+    location = f"{base_url}{process_id}/jobs/{job_id}"
     headers = {"Location": f"{location}"}
     if job:
         return JSONResponse(

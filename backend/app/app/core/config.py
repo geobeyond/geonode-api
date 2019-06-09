@@ -92,6 +92,13 @@ WPS REST/JSON Binding 1.0 conformance classes implemented by this server"
     PROCESSES = "Metadata about the processes"
 
 
+class StatusMessage(str, Enum):
+    ACCEPTED   = "Process started"
+    RUNNING    = "Process is running"
+    SUCCESSFUL = "Process finished"
+    FAILED     = "Process failed"
+
+
 def get_wps_link(location, rel, apptype, lang, title):
     return {
         "href": f"{SERVER_HOST}{API_V1_STR}/{location}/",
@@ -118,10 +125,11 @@ WPS_SERVICE_LINK = {
     "title": Title.SERVICE
 }
 
-WPS_PROCESS_LINK = {
-    "href": f"{SERVER_HOST}{API_V1_STR}/processes",
-    "rel": WPSRel.PROCESSES,
-    "type": ApplicationType.JSON,
-    "hreflang": Lang.EN,
-    "title": Title.PROCESSES
-}
+
+WPS_PROCESS_LINK = get_wps_link(
+    f"{WPS_LOCATION}/{WPSRel.PROCESSES.value}",
+    WPSRel.PROCESSES,
+    ApplicationType.JSON,
+    Lang.EN,
+    Title.PROCESSES
+)

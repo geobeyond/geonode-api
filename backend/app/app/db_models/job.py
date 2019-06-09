@@ -6,6 +6,7 @@ from uuid import uuid4
 
 from app.db.base_class import Base
 from app.models.job import statusEnum
+from app.core.config import StatusMessage
 
 
 class Job(Base):
@@ -19,7 +20,11 @@ class Job(Base):
         index=True,
         default=statusEnum.ACCEPTED.value
     )
-    message     = Column(String, index=True)
+    message     = Column(
+        String,
+        index=True,
+        default=StatusMessage.ACCEPTED.value
+    )
     progress    = Column(Integer, default=0)
     links       = Column(postgresql.JSONB)
     inputs      = Column(postgresql.JSONB)
