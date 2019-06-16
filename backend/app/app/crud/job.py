@@ -1,10 +1,18 @@
 from typing import List, Optional
+from pydantic import UUID4
 
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
 from app.db_models.job import Job
 from app.models.job import JobCreate
+
+import logging
+logger = logging.getLogger("uvicorn")
+
+
+def get_by_id(db_session: Session, *, jid: UUID4) -> Optional[Job]:
+    return db_session.query(Job).filter(Job.jid == jid).first()
 
 
 def get_multi_by_process(
@@ -41,9 +49,16 @@ def get_multi_by_process_by_owner(
     )
 
 
-def create(db_session: Session, *, job_in: JobCreate, process_id: int, owner_id: int) -> Job:
+def create(
+    db_session: Session,
+    *,
+    job_in: JobCreate,
+    process_id: int,
+    owner_id: int
+) -> Job:
     job_in_data = jsonable_encoder(job_in)
     job = Job(**job_in_data, process_id=process_id, owner_id=owner_id)
+    logger.info(job.status)
     db_session.add(job)
     db_session.commit()
     db_session.refresh(job)

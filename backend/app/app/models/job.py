@@ -1,6 +1,5 @@
 from typing import List
 from enum import Enum
-from uuid import UUID
 from datetime import datetime
 from pydantic import Schema, BaseModel, UUID4
 from app.models.common import link

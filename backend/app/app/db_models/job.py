@@ -29,6 +29,7 @@ class Job(Base):
     links       = Column(postgresql.JSONB)
     inputs      = Column(postgresql.JSONB)
     outputs     = Column(postgresql.JSONB)
+    result      = Column(postgresql.JSONB)
     created_at  = Column(DateTime, default=func.now(), nullable=False)
     updated_at  = Column(DateTime, onupdate=func.now())
     process_id  = Column(Integer, ForeignKey("process.pid"))

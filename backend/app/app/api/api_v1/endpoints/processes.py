@@ -1,5 +1,6 @@
 import json
 from typing import List
+from pydantic import UUID4
 
 from fastapi import APIRouter, Depends, HTTPException
 from starlette.status import HTTP_201_CREATED
@@ -15,9 +16,11 @@ from app.models.process import (
     processCollection,
     Process,
     ProcessCreate,
-    processOffering
+    processOffering,
+    jobControlOptions
 )
-from app.models.job import jobCollection, JobCreate
+from app.models.job import jobCollection, JobCreate, statusInfo
+from app.core.celery_app import celery_app
 
 
 import logging
@@ -157,7 +160,6 @@ def create_wps_job_by_process(
             status_code=404,
             detail=f"The process with id {id} does not exist."
         )
-    process_id = process.id
     job = crud.job.create(
         db_session=db,
         job_in=job_in,
@@ -166,9 +168,14 @@ def create_wps_job_by_process(
     )
     base_url = WPS_PROCESS_LINK["href"]
     job_id = job.jid
-    location = f"{base_url}{process_id}/jobs/{job_id}"
+    location = f"{base_url}{id}/jobs/{job_id}"
     headers = {"Location": f"{location}"}
     if job:
+        if jobControlOptions.ASYNC in process.jobControlOptions:
+            celery_app.send_task(
+                "app.worker.async_buffer",
+                args=[job.jid]
+            )
         return JSONResponse(
             content=None,
             headers=headers,

@@ -8,7 +8,6 @@ from app.models.common import (
 from app.models.common import transmissionMode, format as Format
 
 
-
 class dataType(BaseModel):
     format_: Format = Schema(None, alias="format")
 
