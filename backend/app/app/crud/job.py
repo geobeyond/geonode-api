@@ -8,7 +8,9 @@ from app.db_models.job import Job
 from app.models.job import JobCreate
 
 import logging
-logger = logging.getLogger("uvicorn")
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def get_by_id(db_session: Session, *, jid: UUID4) -> Optional[Job]:
@@ -58,8 +60,8 @@ def create(
 ) -> Job:
     job_in_data = jsonable_encoder(job_in)
     job = Job(**job_in_data, process_id=process_id, owner_id=owner_id)
-    logger.info(job.status)
     db_session.add(job)
     db_session.commit()
     db_session.refresh(job)
+    logger.info(f"Initial job status is {job.status}")
     return job

@@ -21,10 +21,14 @@ from app.models.process import (
 )
 from app.models.job import jobCollection, JobCreate, statusInfo
 from app.core.celery_app import celery_app
-
+from app.worker import async_buffer
+from app.tasks.base import WPSTask
 
 import logging
-logger = logging.getLogger("uvicorn")
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 router = APIRouter()
@@ -171,13 +175,54 @@ def create_wps_job_by_process(
     location = f"{base_url}{id}/jobs/{job_id}"
     headers = {"Location": f"{location}"}
     if job:
+        # the conditional order drives the precedence of async/sync for now
+        # It could be something like ?c=sync/async
         if jobControlOptions.ASYNC in process.jobControlOptions:
+            logger.info(f"Launch async task for jobID {job_id}")
             celery_app.send_task(
-                "app.worker.async_buffer",
-                args=[job.jid]
+                "async_buffer",
+                args=[job.jid, location]
             )
-        return JSONResponse(
-            content=None,
-            headers=headers,
-            status_code=HTTP_201_CREATED
+            return JSONResponse(
+                content=None,
+                headers=headers,
+                status_code=HTTP_201_CREATED
+            )
+        elif jobControlOptions.SYNC in process.jobControlOptions:
+            # @TODO: Implement an abstract way to get the process
+            # to run from the catalog
+            pass
+
+@router.get(
+    "/processes/{id}/jobs/{jobID}",
+    operation_id="getStatus",
+    response_model=statusInfo,
+    status_code=200,
+    include_in_schema=True
+)
+def read_wps_job_by_process(
+    *,
+    db: Session = Depends(get_db),
+    id: str,
+    jobID: UUID4,
+    current_user: DBUser = Depends(get_current_active_user),
+):
+    """
+    Retrieve job status for a wps process.
+    """
+    process = crud.process.get_by_id(db_session=db, id=id)
+    if not process:
+        raise HTTPException(
+            status_code=404,
+            detail=f"The process with id {id} does not exist."
         )
+    job = crud.job.get_by_id(
+        db_session=db,
+        jid=jobID,
+    )
+    if not job:
+        raise HTTPException(
+            status_code=404,
+            detail=f"The job with jobID {jobID} does not exist."
+        )
+    return job

@@ -6,6 +6,9 @@ from app.db.base_class import Base
 
 
 class Process(Base):
+
+    __tablename__ = 'process'
+
     pid                = Column(Integer, primary_key=True, index=True)
     id                 = Column(String, unique=True, index=True)
     title              = Column(String, index=True)
@@ -20,4 +23,4 @@ class Process(Base):
     outputs            = Column(postgresql.JSONB)
     owner_id           = Column(Integer, ForeignKey("user.id"))
     owner              = relationship("User", back_populates="processes")
-    jobs               = relationship("Job", back_populates="process")
+    jobs               = relationship("Job", back_populates="process_ref")

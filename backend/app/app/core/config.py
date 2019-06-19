@@ -74,10 +74,11 @@ class ApplicationType(str, Enum):
 
 
 class WPSRel(str, Enum):
-    SELF = "self"
-    SERVICE = "service"
+    SELF        = "self"
+    SERVICE     = "service"
     CONFORMANCE = "conformance"
-    PROCESSES = "processes"
+    PROCESSES   = "processes"
+    RESULT      = "result"
 
 
 class Lang(str, Enum):
@@ -85,11 +86,12 @@ class Lang(str, Enum):
 
 
 class Title(str, Enum):
-    SELF = "this document"
-    SERVICE = "the API definition"
+    SELF        = "This document"
+    SERVICE     = "OGC API - Processes definition"
     CONFORMANCE = "\
-WPS REST/JSON Binding 1.0 conformance classes implemented by this server"
-    PROCESSES = "Metadata about the processes"
+OGC API - Processes 1.0 conformance classes implemented by this server"
+    PROCESSES   = "Metadata about the processes"
+    RESULT      = "Process result"
 
 
 class StatusMessage(str, Enum):

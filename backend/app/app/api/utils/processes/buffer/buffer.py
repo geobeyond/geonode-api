@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from app.models.input import input as Input
 from app.models.output import output as Output
 from app.models.result import (
@@ -37,7 +37,7 @@ class Buffer:
         """
         self.__result = value
 
-    def run(self):
+    def run(self) -> Result:
         """
         Perform buffering on vector data.
         """
@@ -64,4 +64,4 @@ class Buffer:
                 ]
             }
         res = mock_feature
-        self.__result = Result(outputs=List[OutputInfo(id="result", value=dict(inlineValue=res))])
+        self.__result = Result(outputs=[OutputInfo(id="result", value=dict(inlineValue=res))])
