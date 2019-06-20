@@ -19,7 +19,13 @@ from app.models.process import (
     processOffering,
     jobControlOptions
 )
-from app.models.job import jobCollection, JobCreate, statusInfo
+from app.models.job import (
+    jobCollection,
+    JobCreate,
+    statusInfo,
+    statusEnum
+)
+from app.models.result import result as Result
 from app.core.celery_app import celery_app
 from app.worker import async_buffer
 from app.tasks.base import WPSTask
@@ -226,3 +232,55 @@ def read_wps_job_by_process(
             detail=f"The job with jobID {jobID} does not exist."
         )
     return job
+
+
+@router.get(
+    "/processes/{id}/jobs/{jobID}/result",
+    operation_id="getResult",
+    response_model=Result,
+    status_code=200,
+    include_in_schema=True
+)
+def read_wps_result_by_job_and_process(
+    *,
+    db: Session = Depends(get_db),
+    id: str,
+    jobID: UUID4,
+    current_user: DBUser = Depends(get_current_active_user),
+):
+    """
+    retrieve the result of an executed job for a process.
+    """
+    process = crud.process.get_by_id(db_session=db, id=id)
+    if not process:
+        raise HTTPException(
+            status_code=404,
+            detail=f"The process with id {id} does not exist."
+        )
+    job = crud.job.get_by_id(
+        db_session=db,
+        jid=jobID,
+    )
+    if not job:
+        raise HTTPException(
+            status_code=404,
+            detail=f"The job with jobID {jobID} does not exist."
+        )
+    if job.result:
+        return job.result
+    else:
+        if job.status == statusEnum.ACCEPTED.value:
+            raise HTTPException(
+                status_code=404,
+                detail=f"The job with jobID {jobID} is not running yet."
+            )
+        elif job.status == statusEnum.RUNNING.value:
+            raise HTTPException(
+                status_code=404,
+                detail=f"The job with jobID {jobID} is still running."
+            )
+        elif job.status == statusEnum.FAILED.value:
+            raise HTTPException(
+                status_code=404,
+                detail=f"The job with jobID {jobID} is failed."
+            )

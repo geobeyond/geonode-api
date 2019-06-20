@@ -75,6 +75,8 @@ def async_buffer(self, job_jid: UUID4, location: UrlStr):
         job.links = job_links
         job.result = result.dict()
         self.session.commit()
-        logger.info("======> Job record refreshed")
+        json_result = result.json()
+        logger.info(f"======> Job record refreshed")
         logger.info(f"======> The new value for the status of the job is {job.status}")
+        logger.info(f"======> Result dictionary for the job {job_jid} is \n{json_result}")
     return f"async buffer finished"
